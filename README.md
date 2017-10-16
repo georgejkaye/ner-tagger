@@ -39,6 +39,7 @@ One flaw in this process is that when more than one Wikipedia page exists for a 
 To evaluate the tagging, the tagged version of the data is parsed and any elements surrounded in ```<ENAMEX>``` tags is recorded in tuples, much like how the tagging process stored elements. These two lists are then compared: elements in both lists are noted as true positives, elements tagged but not found as false positives, and elements found but not tagged as false negatives. An accuracy score is then calculated using [F1 score][7]  (precision * recall / precision + recall).
 
 ![Name first, no wiki](/eval/nowiki.jpg) ![Name first, wiki](/eval/wiki.jpg)
+
 ![Org first, name last, no wiki](/eval/orgsfirst.jpg) ![Loc first, name last, no wiki](/eval/locsfirst.jpg)
 
 Four sets of evaluation results can be seen above. The data on the top uses the initial configuration of the system, tagging names first. As can be seen, there is in fact a very small (just over 2%) increase between the set with wikification and without, despite it increasing the time taken drastically (larger sets were more likely to time out than tag completely).
