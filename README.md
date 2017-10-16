@@ -2,13 +2,13 @@
 
 ## Tagging 
 ### Parsing Training Data
-The training data  is read by the system and, using regular expressions  (looking for the ```<ENAMEX = “”>``` tags, the named entities are extracted and stored in three text files: ```names.txt```, ```locs.txt``` and ```orgs.txt```. This means that any entities recognised at this stage will be stored for future use (beyond the WSJ test set, for example). Three ```WordListCorpusReader``` objects are then created to house these data for use later on in the code.
+The training data  is read by the system and, using [regular expressions][1] (looking for the ```<ENAMEX = “”>``` tags, the named entities are extracted and stored in three text files: ```names.txt```, ```locs.txt``` and ```orgs.txt```. This means that any entities recognised at this stage will be stored for future use (beyond the WSJ test set, for example). Three [```WordListCorpusReader```][2] objects are then created to house these data for use later on in the code.
 
 ### Other Corpora
 As well as corpora gathered from the training data, several other corpora are supplied with the code: the names corpora ```male```, ```female``` and ```family```, which were provided via Canvas. Three other corpora have been self-defined: ```titles```, a list of common name titles (such as Mr and Mrs), ```orgsuffs```, a list of organisation suffixes (such as plc and Ltd.), and ```daymonths```, a list of days and months (which are often erroneously tagged during the process). All of these corpora are used during the tagging process.
 
 ### POS Taggers and Extracting Named Entites
-The inbuilt nltk POS tagger  is used to tag the words appropriately. Once the words are all tagged, the program iterates through the new wordlist and adds every word tagged with ```NNP``` (i.e. proper nouns) to a list. If the program finds two proper nouns next to each other, they are joined together to form one entity. This is effectively a simple (albeit rather naïve) chunker.
+The inbuilt [nltk POS tagger][3] is used to tag the words appropriately. Once the words are all tagged, the program iterates through the new wordlist and adds every word tagged with ```NNP``` (i.e. proper nouns) to a list. If the program finds two proper nouns next to each other, they are joined together to form one entity. This is effectively a simple (albeit rather naïve) chunker.
 
 ### Classifying the Named Entities
 Now that the program has a list of (what it believes) to be all the named entities in the text, it attempts to classify them. It iterates through every item in the entities list, skipping them if they have already been tagged (there are often duplicates in the text and tagging each one would be time-wasting).
@@ -29,14 +29,14 @@ Organisations are slightly harder than names in that they have a less limited se
 Locations are the hardest entity to tag since there are very few ways to identify them without knowledge of the real world, which the program does not have. All that can be done at the first stage is check against the training data: several common locations like *USA* and *UK* are contained within it.
 
 ### Wikification
-Clearly this naïve method of tagging provides nowhere near enough accuracy for a useful system. Therefore, after the first process, untagged entities are checked against Wikipedia articles (using a modified version of the Wikification code provided on Canvas ). 
+Clearly this naïve method of tagging provides nowhere near enough accuracy for a useful system. Therefore, after the first process, untagged entities are checked against Wikipedia articles (using a modified version of the Wikification code provided on Canvas). 
 
-Rather than the search results as was initially suggested, the method has been modified to take wiki markup  from the page. Using regular expressions, the ```{{Infobox}}``` template code is lifted from it. Often the title of the infobox template will contain exactly what the program needs (e.g. Infobox UK place ), and if not there will normally be fields further down which will help decide which tag is appropriate (e.g. born for a person). The template is checked against a selection of buzzwords and if an appropriate match is found this is returned to the main program.
+Rather than the search results as was initially suggested, the method has been modified to take [wiki markup][4] from the page. Using regular expressions, the ```{{Infobox}}``` template code is lifted from it. Often the title of the infobox template will contain exactly what the program needs (e.g. [Infobox UK place][5]), and if not there will normally be fields further down which will help decide which tag is appropriate (e.g. born for a person). The template is checked against a selection of buzzwords and if an appropriate match is found this is returned to the main program.
 
-One flaw in this process is that when more than one Wikipedia page exists for a query (common with place names ), Wikipedia will sometimes redirect to a disambiguation page. The program detects this by checking for the phrase *may refer to* in the markup, which seems to be common to all disambiguation pages. Then it searches for the first link on the page (again not the most accurate of methods but acceptable).
+One flaw in this process is that when more than one Wikipedia page exists for a query ([common with place names][6]), Wikipedia will sometimes redirect to a disambiguation page. The program detects this by checking for the phrase *may refer to* in the markup, which seems to be common to all disambiguation pages. Then it searches for the first link on the page (again not the most accurate of methods but acceptable).
 
 ## Evaluation
-To evaluate the tagging, the tagged version of the data is parsed and any elements surrounded in ```<ENAMEX>``` tags is recorded in tuples, much like how the tagging process stored elements. These two lists are then compared: elements in both lists are noted as true positives, elements tagged but not found as false positives, and elements found but not tagged as false negatives. An accuracy score is then calculated using F1 score  (precision * recall / precision + recall).
+To evaluate the tagging, the tagged version of the data is parsed and any elements surrounded in ```<ENAMEX>``` tags is recorded in tuples, much like how the tagging process stored elements. These two lists are then compared: elements in both lists are noted as true positives, elements tagged but not found as false positives, and elements found but not tagged as false negatives. An accuracy score is then calculated using [F1 score][7]  (precision * recall / precision + recall).
 
 ![Name first, no wiki](/eval/nowiki.jpg) ![Name first, wiki](/eval/wiki.jpg)
 ![Org first, name last, no wiki](/eval/orgsfirst.jpg) ![Loc first, name last, no wiki](/eval/locsfirst.jpg)
@@ -49,3 +49,10 @@ To test the effects of the tagging order, two more tests were run. Names was rel
 
 To actually get a suitably accurate result, context would have to be taken into account. With the current process (simply analysing each named entity independent of location), it is impossible to distinguish between the different meanings of words (seen in the wikification process), which is why the order of tagging has such a large effect on the result. This means that although many words are indeed tagged as named entities, they are tagged as the incorrect type, resulting in a false positive still being flagged.
 
+[1]: https://docs.python.org/2/library/re.html (27/11/2016, 18:00)
+[2]: http://www.nltk.org/_modules/nltk/corpus/reader/wordlist.html (12/11/2016, 15:15)
+[3]: http://www.nltk.org/book/ch05.html
+[4]: https://www.mediawiki.org/wiki/API:Query (04/12/16, 18:00)
+[5]: https://en.wikipedia.org/wiki/Template:Infobox_UK_place (04/12/16, 18:15)
+[6]: https://en.wikipedia.org/wiki/Corston (04/12/16, 18:30) 
+[7]: https://en.wikipedia.org/wiki/F1_score (03/12/16, 12:30)
