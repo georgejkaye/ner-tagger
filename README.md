@@ -9,7 +9,7 @@ You will also need to install the following through `nltk.download()` in your pr
 * `punkt`
 * `averaged_perceptron_tagger`
 
-The main executable is `main.py` in the `code` subfolder. This can be run with all Python files with `python main.py`
+The main executable is `main.py` in the `code` subfolder. This can be run with `python main.py`
 
 Inside the `results` folder there is a batch file `reset.bat` that can be used to wipe all the tagged and found files for a fresh evaluation of data.
 
