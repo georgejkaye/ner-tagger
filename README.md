@@ -1,5 +1,18 @@
 # Named Entity Recognition in the WSJ
 
+## Usage
+To use the tagger you will require
+* [Python 3](https://www.python.org/)
+* [NLTK](https://www.nltk.org/)
+
+You will also need to install the following through `nltk.download()` in your preferred Python interpreter:
+* `punkt`
+* `averaged_perceptron_tagger`
+
+The main executable is `main.py` in the `code` subfolder. This can be run with all Python files with `python main.py`
+
+Inside the `results` folder there is a batch file `reset.bat` that can be used to wipe all the tagged and found files for a fresh evaluation of data.
+
 ## Tagging 
 ### Parsing Training Data
 The training data  is read by the system and, using [regular expressions][1] (looking for the ```<ENAMEX = “”>``` tags, the named entities are extracted and stored in three text files: ```names.txt```, ```locs.txt``` and ```orgs.txt```. This means that any entities recognised at this stage will be stored for future use (beyond the WSJ test set, for example). Three [```WordListCorpusReader```][2] objects are then created to house these data for use later on in the code.
